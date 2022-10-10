@@ -2,29 +2,15 @@
 import { initializeApp } from 'firebase/app';
 import {
   getAuth,
-  signInWithRedirect,
   signInWithPopup,
   GoogleAuthProvider,
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
   signOut,
+  onAuthStateChanged,
 } from 'firebase/auth';
 
-import {
-  getFirestore,
-  collection,
-  getDoc,
-  addDoc,
-  doc,
-  setDoc,
-  updateDoc,
-  deleteDoc,
-  query,
-  where,
-  orderBy,
-  limit,
-  onSnapshot,
-} from 'firebase/firestore';
+import { getFirestore, getDoc, doc, setDoc } from 'firebase/firestore';
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
 
@@ -43,7 +29,7 @@ const firebaseApp = initializeApp(firebaseConfig);
 const provide = new GoogleAuthProvider();
 provide.setCustomParameters({ prompt: 'select_account' });
 
-const auth = getAuth();
+export const auth = getAuth();
 export const signInWithGooglePopup = () => {
   return signInWithPopup(auth, provide);
 };
@@ -92,3 +78,7 @@ export const signInAuthUserWithEmailAndPassword = async (email, password) => {
 };
 
 export const signOutUser = async () => await signOut(auth);
+
+export const onAuthStateChangedListener = (callback) => {
+  return onAuthStateChanged(auth, callback);
+};

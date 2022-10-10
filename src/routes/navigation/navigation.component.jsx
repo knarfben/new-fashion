@@ -3,6 +3,7 @@ import { useContext } from 'react';
 import { UserContext } from '../../contexts/user.context';
 import { ReactComponent as Logo } from '../../assets/fashion-company.svg';
 import './navigation.styles.scss';
+import { signOutUser } from '../../utils/firebase/firebase.utils';
 
 const Navigation = () => {
   const { currentUser } = useContext(UserContext);
@@ -22,7 +23,9 @@ const Navigation = () => {
               SIGN IN
             </Link>
           ) : (
-            <span className="nav-link">SIGN OUT</span>
+            <span className="nav-link" onClick={signOutUser}>
+              SIGN OUT
+            </span>
           )}
         </div>
       </div>
