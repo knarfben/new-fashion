@@ -1,12 +1,18 @@
 import { Outlet, Link } from 'react-router-dom';
-import { useContext } from 'react';
+import { useContext, useState } from 'react';
 import { UserContext } from '../../contexts/user.context';
 import { ReactComponent as Logo } from '../../assets/fashion-company.svg';
 import './navigation.styles.scss';
 import { signOutUser } from '../../utils/firebase/firebase.utils';
+import CartIcon from '../../components/cart-icon/cart-icon.component';
+import CartDropdown from '../../components/cart-dropdown/cart-dropdown.component';
 
 const Navigation = () => {
   const { currentUser } = useContext(UserContext);
+  const [showCartDropdown, setShowCartDropdown] = useState(false);
+  const toggleCartDropdown = () => {
+    setShowCartDropdown(!showCartDropdown);
+  };
 
   return (
     <>
@@ -27,7 +33,9 @@ const Navigation = () => {
               SIGN OUT
             </span>
           )}
+          <CartIcon toggleCartDropdown={toggleCartDropdown} />
         </div>
+        {showCartDropdown && <CartDropdown />}
       </div>
       <Outlet />
     </>
