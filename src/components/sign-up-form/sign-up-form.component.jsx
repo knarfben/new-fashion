@@ -1,5 +1,9 @@
-import { useState } from 'react';
-import { createAuthUserWithEmailAndPassword } from '../../utils/firebase/firebase.utils';
+import { useState, useContext } from 'react';
+import { UserContext } from '../../contexts/user.context';
+import {
+  createAuthUserWithEmailAndPassword,
+  createUserDocumentFromAuth,
+} from '../../utils/firebase/firebase.utils';
 import FormInput from '../form-input/form-input.component';
 import './sign-up-form.styles.scss';
 import Button from '../button/button.component';
@@ -11,6 +15,8 @@ const SignUpForm = () => {
     password: '',
     confirmPassword: '',
   };
+
+  const { setCurrentUser } = useContext(UserContext);
 
   const [formFields, setFormFields] = useState(defaultFormFields);
   const { displayName, email, password, confirmPassword } = formFields;
@@ -27,13 +33,18 @@ const SignUpForm = () => {
       return;
     }
     try {
-      await createAuthUserWithEmailAndPassword(email, password, displayName);
+      const { user } = await createAuthUserWithEmailAndPassword(
+        email,
+        password
+      );
+      setCurrentUser(user);
+      await createUserDocumentFromAuth(user, { displayName });
       setFormFields(defaultFormFields);
     } catch (error) {
       if (error.code === 'auth/email-already-in-use') {
         alert('Email already in use');
       } else {
-        alert(error.message);
+        alert('could not fullfill request: ' + error.message);
       }
     }
   };
