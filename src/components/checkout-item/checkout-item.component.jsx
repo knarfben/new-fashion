@@ -30,7 +30,7 @@ const CheckoutItem = ({ item }) => {
           &#10095;
         </div>
       </div>
-      <span className="price">{price}$</span>
+      <span className="price">${price}</span>
       <span className="remove-button" onClick={deleteProductHandler}>
         &#10005;
       </span>
