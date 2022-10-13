@@ -1,4 +1,4 @@
-import { createContext, useEffect, useState } from 'react';
+import { createContext, useEffect, useReducer } from 'react';
 
 export const CartContext = createContext({
   cartItems: [],
@@ -7,10 +7,65 @@ export const CartContext = createContext({
   total: 0,
 });
 
+const CART_ACTION_TYPES = {
+  SET_CART_COUNT: 'SET_CART_COUNT',
+  SET_TOTAL_AMOUNT: 'SET_TOTAL_AMOUNT',
+  SET_CART_ITEMS: 'SET_CART_ITEMS',
+};
+
+const CART_INITIAL_STATE = {
+  cartItems: [],
+  cartCount: 0,
+  total: 0,
+};
+
+const cartReducer = (state, action) => {
+  const { type, payload } = action;
+  switch (type) {
+    case CART_ACTION_TYPES.SET_CART_COUNT:
+      return {
+        ...state,
+        cartCount: payload,
+      };
+    case CART_ACTION_TYPES.SET_TOTAL_AMOUNT:
+      return {
+        ...state,
+        total: payload,
+      };
+    case CART_ACTION_TYPES.SET_CART_ITEMS:
+      return {
+        ...state,
+        cartItems: payload,
+      };
+    default:
+      throw new Error(`Unhandled action type ${type}`);
+  }
+};
+
 export const CartProvider = ({ children }) => {
-  const [cartItems, setCartItems] = useState([]);
-  const [cartCount, setCartCount] = useState(0);
-  const [total, setTotal] = useState(0);
+  const [state, dispatch] = useReducer(cartReducer, CART_INITIAL_STATE);
+  const { cartItems, cartCount, total } = state;
+
+  const setCartCount = (itemsCount) => {
+    dispatch({
+      type: CART_ACTION_TYPES.SET_CART_COUNT,
+      payload: itemsCount,
+    });
+  };
+
+  const setTotal = (tot) => {
+    dispatch({
+      type: CART_ACTION_TYPES.SET_TOTAL_AMOUNT,
+      payload: tot,
+    });
+  };
+
+  const setCartItems = (cItems) => {
+    dispatch({
+      type: CART_ACTION_TYPES.SET_CART_ITEMS,
+      payload: cItems,
+    });
+  };
 
   useEffect(() => {
     setCartCount(
