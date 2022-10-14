@@ -1,6 +1,7 @@
 import { Outlet, Link } from 'react-router-dom';
 import { useContext, useState } from 'react';
 import { UserContext } from '../../contexts/user.context';
+import { CartContext } from '../../contexts/cart.context';
 import { ReactComponent as Logo } from '../../assets/fashion-company.svg';
 import './navigation.styles.scss';
 import { signOutUser } from '../../utils/firebase/firebase.utils';
@@ -9,9 +10,10 @@ import CartDropdown from '../../components/cart-dropdown/cart-dropdown.component
 
 const Navigation = () => {
   const { currentUser } = useContext(UserContext);
-  const [showCartDropdown, setShowCartDropdown] = useState(false);
-  const toggleCartDropdown = () => {
-    setShowCartDropdown(!showCartDropdown);
+  const { toggleCartOpen, isCartOpen } = useContext(CartContext);
+  const toggleCartDropdown = (e) => {
+    e.stopPropagation();
+    toggleCartOpen();
   };
 
   return (
@@ -35,7 +37,7 @@ const Navigation = () => {
           )}
           <CartIcon toggleCartDropdown={toggleCartDropdown} />
         </div>
-        {showCartDropdown && <CartDropdown />}
+        {isCartOpen && <CartDropdown />}
       </div>
       <Outlet />
     </>
