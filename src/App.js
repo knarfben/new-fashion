@@ -23,7 +23,7 @@ const App = () => {
       dispatch(setCurrentUser(user));
     });
     return unsubscribe;
-  }, []);
+  }, [dispatch]);
   // could use dispatch so the linter would not complain about the missing dependency.
   // But since we know dispatch will never change, we can just leave it out.
 
