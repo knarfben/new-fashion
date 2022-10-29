@@ -33,7 +33,6 @@ const cartReducer = (state, action) => {
         ...state,
         isCartOpen: payload,
       };
-      console.log({ ret });
       return ret;
     default:
       throw new Error(`Unhandled action type ${type}`);
