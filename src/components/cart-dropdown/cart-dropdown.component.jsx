@@ -1,20 +1,27 @@
 import './cart-dropdown.styles.scss';
+import { useSelector } from 'react-redux';
 import Button from '../button/button.component';
-import { useContext } from 'react';
-import { CartContext } from '../../contexts/cart.context';
 import CartItem from '../cart-item/cart-item.component';
 import { useNavigate } from 'react-router-dom';
 import { useDetectClickOutside } from 'react-detect-click-outside';
+import { useDispatch } from 'react-redux';
+import { toggleCartOpen } from '../../store/cart/cart.action';
+import {
+  selectCartItems,
+  selectCartCount,
+} from '../../store/cart/cart.selector';
 
 const CartDropdown = () => {
-  const { cartItems, cartCount, toggleCartOpen } = useContext(CartContext);
+  const cartItems = useSelector(selectCartItems);
+  const cartCount = useSelector(selectCartCount);
+  const dispatch = useDispatch();
   const ref = useDetectClickOutside({
-    onTriggered: toggleCartOpen,
+    onTriggered: () => dispatch(toggleCartOpen()),
   });
   const navigate = useNavigate();
   const goToCheckoutHandler = () => {
     navigate('/checkout');
-    toggleCartOpen();
+    dispatch(toggleCartOpen());
   };
   return (
     <div className="cart-dropdown-container" ref={ref}>
